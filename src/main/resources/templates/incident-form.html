@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${incidentId != null} ? 'CIRT — Edit Incident' : 'CIRT — New Incident'">CIRT — Incident Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark cirt-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/"><i class="bi bi-shield-fill-exclamation me-2"></i>CIRT</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/incidents"><i class="bi bi-list-ul me-1"></i>Incidents</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/incidents/new"><i class="bi bi-plus-circle me-1"></i>New Incident</a></li>
+                <li class="nav-item"><a class="nav-link" href="/alerts"><i class="bi bi-exclamation-triangle me-1"></i>Alerts</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4" style="max-width: 800px;">
+
+    <div class="mb-4">
+        <a href="/incidents" class="text-decoration-none text-muted">
+            <i class="bi bi-arrow-left me-1"></i>Back to Incidents
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="h4 mb-0 fw-bold"
+                th:text="${incidentId != null} ? 'Edit Incident #' + ${incidentId} : 'Report New Incident'">
+            </h1>
+        </div>
+        <div class="card-body">
+
+            <!-- Edit form action differs from create -->
+            <form th:if="${incidentId != null}"
+                  th:action="@{/incidents/{id}/edit(id=${incidentId})}"
+                  th:object="${incidentDto}"
+                  method="post"
+                  novalidate>
+
+                <th:block th:replace="~{::formFields}"></th:block>
+
+            </form>
+
+            <form th:if="${incidentId == null}"
+                  th:action="@{/incidents}"
+                  th:object="${incidentDto}"
+                  method="post"
+                  novalidate>
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+                    <input type="text" id="title" th:field="*{title}" class="form-control"
+                           th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'"
+                           placeholder="Brief description of the incident" maxlength="200">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+                    <textarea id="description" th:field="*{description}" class="form-control" rows="4"
+                              th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                              placeholder="Detailed description of what happened..."></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                </div>
+
+                <!-- Category and Severity on same row -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="category" class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+                        <select id="category" th:field="*{category}" class="form-select"
+                                th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
+                            <option value="">— Select Category —</option>
+                            <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="severity" class="form-label fw-semibold">Severity <span class="text-danger">*</span></label>
+                        <select id="severity" th:field="*{severity}" class="form-select"
+                                th:classappend="${#fields.hasErrors('severity')} ? 'is-invalid'">
+                            <option value="">— Select Severity —</option>
+                            <option th:each="sev : ${severities}" th:value="${sev}" th:text="${sev}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('severity')}" th:errors="*{severity}"></div>
+                    </div>
+                </div>
+
+                <!-- Status (edit mode only) -->
+                <div class="row g-3 mb-3" th:if="${statuses != null}">
+                    <div class="col-md-6">
+                        <label for="status" class="form-label fw-semibold">Status</label>
+                        <select id="status" th:field="*{status}" class="form-select">
+                            <option th:each="sta : ${statuses}" th:value="${sta}" th:text="${sta}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Reporter and Assignee -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="reportedBy" class="form-label fw-semibold">Reported By <span class="text-danger">*</span></label>
+                        <input type="text" id="reportedBy" th:field="*{reportedBy}" class="form-control"
+                               th:classappend="${#fields.hasErrors('reportedBy')} ? 'is-invalid'"
+                               placeholder="Your name">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('reportedBy')}" th:errors="*{reportedBy}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="assignedTo" class="form-label fw-semibold">Assigned To</label>
+                        <input type="text" id="assignedTo" th:field="*{assignedTo}" class="form-control"
+                               placeholder="Assignee name (optional)">
+                    </div>
+                </div>
+
+                <!-- Resolution (edit mode only) -->
+                <div class="mb-3" th:if="${incidentId != null}">
+                    <label for="resolution" class="form-label fw-semibold">Resolution</label>
+                    <textarea id="resolution" th:field="*{resolution}" class="form-control" rows="3"
+                              placeholder="Describe how the incident was resolved (optional)"></textarea>
+                </div>
+
+                <hr>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>
+                        <span th:text="${incidentId != null} ? 'Save Changes' : 'Submit Incident'">Submit</span>
+                    </button>
+                    <a href="/incidents" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

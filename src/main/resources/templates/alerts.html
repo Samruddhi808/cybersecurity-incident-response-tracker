@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIRT — Alerts</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark cirt-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/"><i class="bi bi-shield-fill-exclamation me-2"></i>CIRT</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/incidents"><i class="bi bi-list-ul me-1"></i>Incidents</a></li>
+                <li class="nav-item"><a class="nav-link" href="/incidents/new"><i class="bi bi-plus-circle me-1"></i>New Incident</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/alerts"><i class="bi bi-exclamation-triangle me-1"></i>Alerts</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 mt-4">
+
+    <div class="mb-4">
+        <h1 class="h3 fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Incident Alerts</h1>
+        <p class="text-muted">Incidents requiring immediate attention based on severity, assignment, or age.</p>
+    </div>
+
+    <!-- Alert rules explanation -->
+    <div class="alert alert-warning d-flex gap-3 mb-4" role="alert">
+        <i class="bi bi-info-circle-fill fs-5 flex-shrink-0 mt-1"></i>
+        <div>
+            <strong>Alert criteria:</strong>
+            <ul class="mb-0 mt-1">
+                <li>CRITICAL severity incidents that are not yet RESOLVED or CLOSED</li>
+                <li>HIGH severity incidents with no assigned team member</li>
+                <li>Any incident unresolved or uncontained for more than 24 hours</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- No alerts -->
+    <div th:if="${#lists.isEmpty(alerts)}" class="card">
+        <div class="card-body text-center py-5 text-success">
+            <i class="bi bi-shield-check fs-1 d-block mb-2"></i>
+            <h5>No active alerts</h5>
+            <p class="text-muted mb-0">All incidents are under control. Good work!</p>
+        </div>
+    </div>
+
+    <!-- Alert list -->
+    <div th:if="${not #lists.isEmpty(alerts)}" class="card">
+        <div class="card-header d-flex justify-content-between">
+            <span class="fw-semibold text-danger">
+                <i class="bi bi-exclamation-circle me-1"></i>
+                <span th:text="${#lists.size(alerts)}">0</span> incident(s) need attention
+            </span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#ID</th>
+                        <th>Title</th>
+                        <th>Severity</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                        <th>Created</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="incident : ${alerts}" class="table-warning">
+                        <td class="text-muted small" th:text="${incident.id}"></td>
+                        <td>
+                            <a th:href="@{/incidents/{id}(id=${incident.id})}"
+                               th:text="${incident.title}"
+                               class="fw-semibold text-decoration-none"></a>
+                        </td>
+                        <td>
+                            <span th:class="'badge severity-' + ${#strings.toLowerCase(incident.severity)}"
+                                  th:text="${incident.severity}"></span>
+                        </td>
+                        <td>
+                            <span th:class="'badge status-' + ${#strings.toLowerCase(incident.status)}"
+                                  th:text="${incident.status}"></span>
+                        </td>
+                        <td>
+                            <span th:if="${incident.assignedTo == null or incident.assignedTo.isBlank()}"
+                                  class="text-danger fw-semibold">
+                                <i class="bi bi-person-x me-1"></i>Unassigned
+                            </span>
+                            <span th:if="${incident.assignedTo != null and !incident.assignedTo.isBlank()}"
+                                  th:text="${incident.assignedTo}"></span>
+                        </td>
+                        <td class="text-muted small"
+                            th:text="${#temporals.format(incident.createdAt, 'dd MMM yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:href="@{/incidents/{id}(id=${incident.id})}"
+                               class="btn btn-sm btn-danger">
+                                <i class="bi bi-arrow-right me-1"></i>View
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+/* ============================================================
+   CIRT — Custom Stylesheet
+   Complements Bootstrap 5. Keep additions minimal.
+   ============================================================ */
+
+/* --- Navbar --- */
+.cirt-navbar {
+    background-color: #1a1f2e;
+    border-bottom: 2px solid #2d3a5e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cirt-navbar .navbar-brand {
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    color: #7eb8f7;
+}
+
+.cirt-navbar .nav-link {
+    color: #9bacc8;
+    transition: color 0.2s;
+}
+
+.cirt-navbar .nav-link:hover,
+.cirt-navbar .nav-link.active {
+    color: #ffffff;
+}
+
+/* --- Stat Cards --- */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* --- Severity Badges --- */
+.badge.severity-low {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge.severity-medium {
+    background-color: #fd7e14;
+    color: #fff;
+}
+
+.badge.severity-high {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge.severity-critical {
+    background-color: #6f0000;
+    color: #fff;
+    animation: pulse-critical 2s infinite;
+}
+
+@keyframes pulse-critical {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.75; }
+}
+
+/* --- Status Badges --- */
+.badge.status-open {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.badge.status-investigating {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.badge.status-contained {
+    background-color: #0dcaf0;
+    color: #212529;
+}
+
+.badge.status-resolved {
+    background-color: #198754;
+    color: #fff;
+}
+
+.badge.status-closed {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* --- Cards --- */
+.card {
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0.85rem 1.25rem;
+}
+
+/* --- Table --- */
+.table thead th {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6c757d;
+    border-bottom-width: 1px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f0f4ff;
+}
+
+/* --- Forms --- */
+.form-control:focus,
+.form-select:focus {
+    border-color: #7eb8f7;
+    box-shadow: 0 0 0 0.2rem rgba(126, 184, 247, 0.25);
+}
+
+/* --- Misc --- */
+body {
+    background-color: #f4f6fb;
+    color: #212529;
+}
+
+a {
+    color: #0d6efd;
+}
