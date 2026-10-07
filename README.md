@@ -227,6 +227,20 @@ mvn -B clean verify
 
 ---
 
+## Complete DevOps Implementation (Weeks 1–15)
+
+- **Week 1–7**: Core Spring Boot CRUD, JPA, Thymeleaf, REST API, H2/PostgreSQL, 31 Unit/Controller Tests.
+- **Week 8**: Docker Containerisation — Multi-stage `Dockerfile`, `docker-compose.yml`, `.dockerignore`, non-root container security.
+- **Week 9**: Declarative CI/CD Pipeline — `Jenkinsfile` with build, unit test, package, Docker build, E2E test, security scan, and deployment stages.
+- **Week 10**: Infrastructure & Configuration Management — Ansible playbooks (`ansible/playbook.yml`, `ansible/inventory.ini`, `ansible/roles/cirt_app`).
+- **Week 11**: Automated Deployment & Rollback — Shell automation scripts (`scripts/deploy.sh`, `scripts/rollback.sh`, `scripts/health_check.sh`).
+- **Week 12**: Security Hardening & Vulnerability Scanning — OWASP Dependency Check plugin in `pom.xml` (`security-scan` profile), `scripts/security_scan.sh`, Trivy container scanner.
+- **Week 13**: Monitoring & Observability — Spring Boot Actuator, Micrometer Prometheus registry (`/actuator/prometheus`), `prometheus.yml` scrape configuration.
+- **Week 14**: Automated Database Backup & Disaster Recovery — `scripts/backup_db.sh`, `scripts/restore_db.sh`, Disaster Recovery Runbook (`docs/disaster_recovery.md`).
+- **Week 15**: End-to-End Verification & Production Readiness — Full pipeline verification, 100% clean test suite, deployment validation.
+
+---
+
 ## Documentation
 
 | Document | Description |
@@ -235,16 +249,5 @@ mvn -B clean verify
 | [`docs/week3-architecture.md`](docs/week3-architecture.md) | Architecture, data model, API list |
 | [`docs/week4-git-workflow.md`](docs/week4-git-workflow.md) | Git branching strategy and workflow |
 | [`docs/week7-jenkins-ci.md`](docs/week7-jenkins-ci.md) | Jenkins CI configuration guide |
+| [`docs/disaster_recovery.md`](docs/disaster_recovery.md) | Database backup, restore, and disaster recovery runbook |
 
----
-
-## Future Weeks (Not Implemented Yet)
-
-- **Week 8** — Jenkinsfile pipeline as code
-- **Week 9** — Selenium end-to-end tests
-- **Week 10** — Selenium tests in Jenkins pipeline
-- **Week 11** — Docker containerisation
-- **Week 12** — Jenkins + Docker CD
-- **Week 13** — Ansible configuration management
-- **Week 14** — Automated provisioning
-- **Week 15** — Final end-to-end release

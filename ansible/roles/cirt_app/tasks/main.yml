@@ -1,0 +1,22 @@
+---
+- name: Copy docker-compose.yml to application directory
+  copy:
+    src: ../../../docker-compose.yml
+    dest: "{{ cirt_app_dir }}/docker-compose.yml"
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+
+- name: Pull and launch CIRT application container stack
+  command: docker compose up -d
+  args:
+    chdir: "{{ cirt_app_dir }}"
+
+- name: Verify CIRT application health status
+  uri:
+    url: "http://localhost:{{ cirt_port }}/actuator/health"
+    status_code: 200
+  register: health_response
+  until: health_response.status == 200
+  retries: 10
+  delay: 5

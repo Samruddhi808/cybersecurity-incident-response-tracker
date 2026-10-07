@@ -1,0 +1,57 @@
+---
+- name: Provision and Deploy CIRT DevOps Infrastructure
+  hosts: all
+  become: yes
+  vars:
+    cirt_dir: /opt/cirt
+    docker_packages:
+      - docker.io
+      - docker-compose-plugin
+      - curl
+      - ufw
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required system packages
+      apt:
+        name: "{{ docker_packages }}"
+        state: present
+
+    - name: Ensure Docker service is started and enabled
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Ensure app directory exists
+      file:
+        path: "{{ cirt_dir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Configure UFW Firewall rules
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop:
+        - "22"
+        - "80"
+        - "443"
+        - "9090"
+
+    - name: Enable UFW Firewall
+      ufw:
+        state: enabled
+
+- name: Deploy CIRT Application
+  hosts: all
+  become: yes
+  roles:
+    - cirt_app
